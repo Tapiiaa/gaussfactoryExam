@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Simulación de Campana de Gauss</title>
+  <script src="https://d3js.org/d3.v6.min.js"></script>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+    }
+    #chart {
+      margin: auto;
+      width: 80%;
+    }
+    .bar {
+      fill: steelblue;
+    }
+    .axis text {
+      font-size: 12px;
+    }
+    .axis path,
+    .axis line {
+      fill: none;
+      stroke: #000;
+      shape-rendering: crispEdges;
+    }
+    #controls {
+      margin-bottom: 20px;
+    }
+    label {
+      margin: 0 5px;
+    }
+    input {
+      width: 60px;
+      text-align: center;
+    }
+    button {
+      margin-left: 10px;
+      padding: 5px 10px;
+    }
+  </style>
+</head>
+<body>
+<h1>Simulación de Campana de Gauss</h1>
+<div id="controls">
+  <label for="numBalls">Número de Bolas:</label>
+  <input type="number" id="numBalls" value="1000" min="1" max="10000">
+  <label for="numLevels">Número de Niveles:</label>
+  <input type="number" id="numLevels" value="10" min="1" max="20">
+  <button id="startButton">Iniciar Simulación</button>
+</div>
+<div id="chart"></div>
+
+<script>
+  const width = 800;
+  const height = 400;
+  const chart = d3.select("#chart")
+          .append("svg")
+          .attr("width", width)
+          .attr("height", height);
+
+  let x = d3.scaleBand().range([0, width]).padding(0.1);
+  let y = d3.scaleLinear().range([height, 0]);
+  let xAxis = chart.append("g").attr("transform", `translate(0, ${height})`);
+  let yAxis = chart.append("g");
+
+  let simulationRunning = false;
+
+  function updateData() {
+    fetch('/simulation/bins')
+            .then(response => response.json())
+            .then(data => {
+              const entries = Object.entries(data).map(([key, value]) => ({
+                position: parseInt(key),
+                count: value
+              }));
+
+              x.domain(entries.map(d => d.position));
+              y.domain([0, d3.max(entries, d => d.count) || 1]);
+
+              let bars = chart.selectAll(".bar")
+                      .data(entries, d => d.position);
+
+              bars.exit().remove();
+
+              bars.enter()
+                      .append("rect")
+                      .attr("class", "bar")
+                      .attr("x", d => x(d.position))
+                      .attr("y", height)
+                      .attr("width", x.bandwidth())
+                      .attr("height", 0)
+                      .attr("fill", "steelblue")
+                      .merge(bars)
+                      .transition()
+                      .duration(500)
+                      .attr("x", d => x(d.position))
+                      .attr("y", d => y(d.count))
+                      .attr("width", x.bandwidth())
+                      .attr("height", d => height - y(d.count));
+
+              xAxis.call(d3.axisBottom(x));
+              yAxis.call(d3.axisLeft(y));
+            });
+  }
+
+  function advanceSimulation() {
+    fetch('/simulation/advance', {
+      method: 'POST'
+    })
+            .then(response => response.json())
+            .then(running => {
+              updateData();
+              if (running) {
+                setTimeout(advanceSimulation, 500); // Avanza cada 500 ms
+              } else {
+                simulationRunning = false;
+                document.getElementById('startButton').disabled = false;
+              }
+            });
+  }
+
+  document.getElementById('startButton').addEventListener('click', () => {
+    const numberOfBalls = document.getElementById('numBalls').value;
+    const numberOfLevels = document.getElementById('numLevels').value;
+
+    fetch(`/simulation/start?numberOfBalls=${numberOfBalls}&numberOfLevels=${numberOfLevels}`, {
+      method: 'POST'
+    }).then(() => {
+      simulationRunning = true;
+      document.getElementById('startButton').disabled = true;
+      updateData();
+      advanceSimulation();
+    });
+  });
+</script>
+</body>
+</html>

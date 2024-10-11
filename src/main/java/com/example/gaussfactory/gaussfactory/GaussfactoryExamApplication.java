@@ -9,6 +9,7 @@ public class GaussfactoryExamApplication {
 
     public static void main(String[] args) {
         SpringApplication.run(GaussfactoryExamApplication.class, args);
+
     }
 }
 
