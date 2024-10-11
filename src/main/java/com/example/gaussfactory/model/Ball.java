@@ -1,31 +1,22 @@
 package com.example.gaussfactory.model;
-
 public class Ball {
-    private int position;
-    private int currentLevel;
 
-    public Ball() {
-        this.position = 0;
-        this.currentLevel = 0;
+    private int currentPosition;
+    private final int totalLevels;
+
+    public Ball(int totalLevels) {
+        this.currentPosition = 0;
+        this.totalLevels = totalLevels;
     }
 
-    public void moveLeft() {
-        position--;
+    // Simular el movimiento de la bola por un nivel
+    public void move() {
+        currentPosition += Math.random() < 0.5 ? -1 : 1;
+        currentPosition = Math.max(0, Math.min(totalLevels, currentPosition));
     }
 
-    public void moveRight() {
-        position++;
-    }
-
-    public int getPosition() {
-        return position;
-    }
-
-    public int getCurrentLevel() {
-        return currentLevel;
-    }
-
-    public void incrementLevel() {
-        currentLevel++;
+    // Obtener la posición actual de la bola
+    public int getCurrentPosition() {
+        return currentPosition;
     }
 }

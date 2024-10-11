@@ -1,71 +1,68 @@
-package com.example.gaussfactory.service;
+package com.example.gaussfactory.service;import java.util.HashMap;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.concurrent.locks.Condition;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
 
-import com.example.gaussfactory.model.Ball;
-import org.springframework.stereotype.Service;
-
-import java.util.*;
-import java.util.concurrent.ConcurrentHashMap;
-
-@Service
 public class SimulationService {
 
-    private final List<Ball> balls = Collections.synchronizedList(new ArrayList<>());
-    private final Map<Integer, Integer> bins = new ConcurrentHashMap<>();
-
-    private final Random random = new Random();
-
+    private int numberOfBalls;
     private int numberOfLevels;
-    private int currentLevel = 0;
-    private boolean simulationRunning = false;
+    private Map<Integer, Integer> bins;
+    private boolean simulationRunning;
+    private final Lock lock = new ReentrantLock();
+    private final Condition condition = lock.newCondition();
+
+    public SimulationService() {
+        bins = new HashMap<>();
+    }
 
     public void startSimulation(int numberOfBalls, int numberOfLevels) {
-        this.numberOfLevels = numberOfLevels;
-        this.currentLevel = 0;
-        this.simulationRunning = true;
-
-        balls.clear();
-        bins.clear();
-
-        for (int i = 0; i < numberOfBalls; i++) {
-            Ball ball = new Ball();
-            balls.add(ball);
-        }
-    }
-
-    public boolean advanceOneLevel() {
-        if (!simulationRunning || currentLevel >= numberOfLevels) {
-            simulationRunning = false;
-            return false;
-        }
-
-        synchronized (balls) {
-            for (Ball ball : balls) {
-                if (ball.getCurrentLevel() <= currentLevel) {
-                    if (random.nextBoolean()) {
-                        ball.moveRight();
-                    } else {
-                        ball.moveLeft();
-                    }
-                    ball.incrementLevel();
-                }
-            }
-
-            // Actualizar los contenedores (bins)
+        lock.lock();
+        try {
+            this.numberOfBalls = numberOfBalls;
+            this.numberOfLevels = numberOfLevels;
+            this.simulationRunning = true;
             bins.clear();
-            for (Ball ball : balls) {
-                bins.merge(ball.getPosition(), 1, Integer::sum);
+            for (int i = 0; i <= numberOfLevels; i++) {
+                bins.put(i, 0);
             }
+        } finally {
+            lock.unlock();
         }
-
-        currentLevel++;
-        return true;
     }
 
-    public Map<Integer, Integer> getBins() {
-        return bins;
+    public boolean advanceSimulation() {
+        lock.lock();
+        try {
+            if (!simulationRunning || numberOfBalls <= 0) {
+                simulationRunning = false;
+                return false;
+            }
+
+            int position = 0;
+            for (int i = 0; i < numberOfLevels; i++) {
+                position += Math.random() < 0.5 ? -1 : 1;
+                position = Math.max(0, Math.min(numberOfLevels, position));
+            }
+
+            bins.put(position, bins.get(position) + 1);
+            numberOfBalls--;
+
+            condition.signalAll();
+            return true;
+        } finally {
+            lock.unlock();
+        }
     }
 
-    public boolean isSimulationRunning() {
-        return simulationRunning;
+    public Map<Integer, Integer> getCurrentBins() {
+        lock.lock();
+        try {
+            return new HashMap<>(bins);
+        } finally {
+            lock.unlock();
+        }
     }
 }
