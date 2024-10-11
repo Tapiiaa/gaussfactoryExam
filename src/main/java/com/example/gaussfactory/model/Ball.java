@@ -24,7 +24,8 @@ public class Ball extends Component{
 
     //Genera un movimiento aleatorio.
     public void moveRandom(){
-        if(random.nextBoolean()){
+        double gaussianValue = random.nextGaussian();
+        if(gaussianValue > 0){
             moveRight();
         } else {
             moveLeft();
