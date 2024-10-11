@@ -1,12 +1,17 @@
 package com.example.gaussfactory.model;
 
-public class Ball {
+import java.util.Random;
+
+public class Ball extends Component{
     private int position;
     private int currentLevel;
+    private Random random;
 
     public Ball() {
+        super("Bola de Gauss");
         this.position = 0;
         this.currentLevel = 0;
+        this.random = new Random();
     }
 
     public void moveLeft() {
@@ -15,6 +20,21 @@ public class Ball {
 
     public void moveRight() {
         position++;
+    }
+
+    //Genera un movimiento aleatorio.
+    public void moveRandom(){
+        if(random.nextBoolean()){
+            moveRight();
+        } else {
+            moveLeft();
+        }
+    }
+
+    //Simulamos la caida a traves de un nivel, dejando que la bola se mueva aleatoriamente.
+    public void fall(){
+        moveRandom();
+        incrementLevel();
     }
 
     public int getPosition() {
