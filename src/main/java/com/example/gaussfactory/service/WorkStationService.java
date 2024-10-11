@@ -9,8 +9,8 @@ import java.util.concurrent.Semaphore;
 public class WorkStationService {
     private final Semaphore semaphore; //Inicializamos el semaforo
 
-    public WorkStationService(Semaphore semaphore) {
-        this.semaphore = semaphore;
+    public WorkStationService(int maxComponents) {
+        this.semaphore = new Semaphore(maxComponents);
     }
 
     //Creamos un componente y lo producimos para luego poder liberar el semaforo
