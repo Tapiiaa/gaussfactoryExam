@@ -2,6 +2,7 @@ package com.example.gaussfactory.service;
 import java.util.ArrayList;
 import java.util.List;
 import com.example.gaussfactory.model.Ball;
+import com.example.gaussfactory.synchronization.SyncManager;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -10,9 +11,11 @@ public class SimulationService {
     private List<Double> data;
     private List<Ball> balls; //Creamos una lista de bolas para simular la caída de varias bolas.
     private int speed = 1; //Velocidad de la simulación por defecto.
+    private final SyncManager syncManager;
 
     public SimulationService() {
         this.balls = new ArrayList<>();
+        this.syncManager = new SyncManager();
     }
 
     // Método para obtener todos los datos de la simulación
@@ -25,33 +28,45 @@ public class SimulationService {
     }
 
     public void initializeBalls(int numberOfBalls){
-        // Inicializar las bolas con la cantidad especificada
-        balls.clear();
-        for (int i = 0; i < numberOfBalls; i++) {
-            balls.add(new Ball());
-        }
+       syncManager.performSyncTask(() ->{
+           // Inicializar las bolas con la cantidad especificada
+           balls.clear();
+           for (int i = 0; i < numberOfBalls; i++) {
+               balls.add(new Ball());
+           }
+       });
+
+
     }
 
     public void setSimulationData(List<Double> data){
-        this.data = data;
+        syncManager.performSyncTask(() -> {
+            this.data = data;  // Protegemos la asignación de datos
+        });
     }
 
     public void startSimulation(){
-        // Iniciar la simulación de la caída de las bolas
-        for (Ball ball : balls){
-            for (int i = 0; i < data.size(); i++) {
-                ball.fall();
-                try{
-                    Thread.sleep(1000 / speed);  //Controla la velocidad de la simulacion.
-                } catch (InterruptedException e){
-                    Thread.currentThread().interrupt();
+        syncManager.performSyncTask(() -> {
+            // Iniciar la simulación de la caída de las bolas
+            for (Ball ball : balls){
+                for (int i = 0; i < data.size(); i++) {
+                    ball.fall();
+                    try{
+                        Thread.sleep(1000 / speed);  //Controla la velocidad de la simulacion.
+                    } catch (InterruptedException e){
+                        Thread.currentThread().interrupt();
+                    }
                 }
             }
-        }
+        });
     }
 
     public void resetSimulation(){
-        balls.clear();
+        syncManager.performSyncTask(() -> {
+            // Reiniciar la simulación
+            balls.clear();
+
+        });
     }
 
     public void stopSimulation(){
@@ -59,7 +74,9 @@ public class SimulationService {
     }
 
     public void setSimulationSpeed(int speed){
-        this.speed = speed;  //Establecemos la velocidad de la simulación
+        syncManager.performSyncTask(() -> {
+            this.speed = speed;  //Establecemos la velocidad de la simulación
+        });
     }
 
     public List<Double> getBallPositions(){
