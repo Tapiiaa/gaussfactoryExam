@@ -1,4 +1,3 @@
-/*
 package com.example.gaussfactory.config;
 
 import com.google.auth.oauth2.GoogleCredentials;
@@ -18,15 +17,14 @@ public class FirebaseConfig {
     @Bean
     public Firestore firestore() throws IOException{
 
-        FileInputStream serviceAccount = new FileInputStream("src/main/resources/gaussfactory-3b7b6-firebase-adminsdk-7zv3d-3b7b6e7b6b.json");
+        FileInputStream serviceAccount = new FileInputStream("src/main/resources/gaussfactoryexam-firebase-adminsdk-caiby-a1cfbc5118.json");
 
         FirebaseOptions options = new FirebaseOptions.Builder()
                 .setCredentials(GoogleCredentials.fromStream(serviceAccount))
-                .setDatabaseUrl("")
+                .setDatabaseUrl("https://gaussfactoryexam.firebaseio.com/")
                 .build();
 
         FirebaseApp.initializeApp(options);
         return FirestoreClient.getFirestore();
     }
 }
-*/
