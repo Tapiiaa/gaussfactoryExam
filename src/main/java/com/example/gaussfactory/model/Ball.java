@@ -56,4 +56,8 @@ public class Ball extends Component{
     public void incrementLevel() {
         currentLevel++;
     }
+
+    public void setSpeed(int speed){
+        random.setSeed(speed);
+    }
 }
