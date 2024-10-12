@@ -20,7 +20,7 @@ public class DataLoader {
                     continue;
                 }
 
-                // Dividir la línea por la coma (CSV) y tomar solo el valor de la segunda columna (Profit)
+
                 String[] values = line.split(",");
                 if (values.length > 1) {
                     try {
