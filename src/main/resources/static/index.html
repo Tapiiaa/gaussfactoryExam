@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Simulación de Campana de Gauss</title>
+  <script src="https://d3js.org/d3.v6.min.js"></script>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+    }
+    #chart {
+      margin: auto;
+      width: 80%;
+    }
+    .bar {
+      fill: steelblue;
+    }
+    .axis text {
+      font-size: 12px;
+    }
+    .axis path,
+    .axis line {
+      fill: none;
+      stroke: #000;
+      shape-rendering: crispEdges;
+    }
+  </style>
+</head>
+<body>
+<h1>Simulación de Campana de Gauss</h1>
+<div id="chart"></div>
+
+<script>
+  // Dimensiones del gráfico
+  const width = 800;
+  const height = 400;
+
+  // Crear el gráfico SVG
+  const svg = d3.select("#chart")
+          .append("svg")
+          .attr("width", width)
+          .attr("height", height);
+
+  // Configurar las escalas
+  let x = d3.scaleLinear().range([0, width]);
+  let y = d3.scaleLinear().range([height, 0]);
+
+  let xAxis = svg.append("g").attr("transform", `translate(0, ${height})`);
+  let yAxis = svg.append("g");
+
+  // Cargar los datos desde el backend
+  fetch('/simulation/data')
+          .then(response => response.json())
+          .then(data => {
+            // Configurar los datos
+            let histogram = d3.histogram()
+                    .domain(x.domain())  // Configurar dominio
+                    .thresholds(x.ticks(50));  // Número de bins
+
+            let bins = histogram(data);
+
+            // Actualizar las escalas según los datos
+            x.domain([d3.min(data), d3.max(data)]);
+            y.domain([0, d3.max(bins, d => d.length)]);
+
+            // Dibujar los ejes
+            xAxis.call(d3.axisBottom(x));
+            yAxis.call(d3.axisLeft(y));
+
+            // Dibujar las barras
+            svg.selectAll("rect")
+                    .data(bins)
+                    .enter()
+                    .append("rect")
+                    .attr("x", d => x(d.x0))
+                    .attr("y", d => y(d.length))
+                    .attr("width", d => x(d.x1) - x(d.x0))
+                    .attr("height", d => height - y(d.length))
+                    .attr("fill", "steelblue");
+          })
+          .catch(error => console.error("Error al cargar los datos:", error));
+</script>
+
+</body>
+</html>

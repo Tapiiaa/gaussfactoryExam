@@ -1,71 +1,18 @@
 package com.example.gaussfactory.service;
+import java.util.List;
 
-import com.example.gaussfactory.model.Ball;
-import org.springframework.stereotype.Service;
-
-import java.util.*;
-import java.util.concurrent.ConcurrentHashMap;
-
-@Service
 public class SimulationService {
 
-    private final List<Ball> balls = Collections.synchronizedList(new ArrayList<>());
-    private final Map<Integer, Integer> bins = new ConcurrentHashMap<>();
+    private List<Double> data;
 
-    private final Random random = new Random();
-
-    private int numberOfLevels;
-    private int currentLevel = 0;
-    private boolean simulationRunning = false;
-
-    public void startSimulation(int numberOfBalls, int numberOfLevels) {
-        this.numberOfLevels = numberOfLevels;
-        this.currentLevel = 0;
-        this.simulationRunning = true;
-
-        balls.clear();
-        bins.clear();
-
-        for (int i = 0; i < numberOfBalls; i++) {
-            Ball ball = new Ball();
-            balls.add(ball);
-        }
+    // Constructor que recibe los datos de la simulación
+    public SimulationService(List<Double> data) {
+        this.data = data;
     }
 
-    public boolean advanceOneLevel() {
-        if (!simulationRunning || currentLevel >= numberOfLevels) {
-            simulationRunning = false;
-            return false;
-        }
-
-        synchronized (balls) {
-            for (Ball ball : balls) {
-                if (ball.getCurrentLevel() <= currentLevel) {
-                    if (random.nextBoolean()) {
-                        ball.moveRight();
-                    } else {
-                        ball.moveLeft();
-                    }
-                    ball.incrementLevel();
-                }
-            }
-
-            // Actualizar los contenedores (bins)
-            bins.clear();
-            for (Ball ball : balls) {
-                bins.merge(ball.getPosition(), 1, Integer::sum);
-            }
-        }
-
-        currentLevel++;
-        return true;
-    }
-
-    public Map<Integer, Integer> getBins() {
-        return bins;
-    }
-
-    public boolean isSimulationRunning() {
-        return simulationRunning;
+    // Método para obtener todos los datos de la simulación
+    public List<Double> getAllData() {
+        return this.data;
     }
 }
+
