@@ -1,3 +1,4 @@
+/*
 package com.example.gaussfactory.config;
 
 import com.google.auth.oauth2.GoogleCredentials;
@@ -28,3 +29,4 @@ public class FirebaseConfig {
         return FirestoreClient.getFirestore();
     }
 }
+*/

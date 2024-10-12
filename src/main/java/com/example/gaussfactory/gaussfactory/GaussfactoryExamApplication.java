@@ -26,7 +26,7 @@ public class GaussfactoryExamApplication {
 
         // Simular el movimiento de la bola por cada nivel
         for (int i = 0; i < data.size(); i++) {
-            ball.move();
+            ball.fall();
         }
 
         // Mostrar los datos de la simulación en formato JSON

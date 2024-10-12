@@ -7,10 +7,17 @@ public class Ball extends Component{
     private int currentLevel;
     private Random random;
 
-    public Ball() {
+    public Ball() { //Constructor por defecto, sin argumentos
         super("Bola de Gauss");
         this.position = 0;
         this.currentLevel = 0;
+        this.random = new Random();
+    }
+
+    public Ball(int initialLevel) { //Constructor que acepta un entero como argumento (initialLevel)
+        super("Bola de Gauss");
+        this.position = position;
+        this.currentLevel = initialLevel;
         this.random = new Random();
     }
 
