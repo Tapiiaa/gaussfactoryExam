@@ -1,0 +1,89 @@
+@startuml
+
+package com.example.gaussfactory.model {
+    class Component {
+        String name
+    }
+
+    class Ball extends Component {
+        int position
+        int currentLevel
+        Random random
+        + moveLeft()
+        + moveRight()
+        + moveRandom()
+        + fall()
+        + getPosition()
+        + getCurrentLevel()
+        + incrementLevel()
+    }
+}
+
+package com.example.gaussfactory.service {
+    class DataLoader {
+        + List<Double> loadData(String filepath)
+    }
+
+    class ComponentAssemblerService {
+        + assembleComponent()
+    }
+
+    class WorkStationService {
+        + produceComponent(Component component)
+    }
+
+    class SimulationService {
+        + startSimulation()
+        + resetSimulation()
+        + stopSimulation()
+        + setSimulationSpeed(int speed)
+    }
+}
+
+package com.example.gaussfactory.factory {
+    class ComponentFactory {
+        + createComponent(String type)
+    }
+}
+
+package com.example.gaussfactory.visualization {
+    class GaussChart {
+        List<Double> data
+        List<Double> currentData
+        + showGaussChart(List<Double> data)
+    }
+}
+
+package com.example.gaussfactory.synchronization {
+    class SyncManager {
+        + performSynchronizedTask(Runnable task)
+    }
+}
+
+package com.example.gaussfactory.config {
+    class ThreadConfig {
+        + ExecutorService executorService()
+    }
+
+    class FirebaseConfig {
+        + Firestore firestore()
+    }
+}
+
+package com.example.gaussfactory.controller {
+    class ProductionController {
+        + startProduction()
+    }
+
+    class SimulationController {
+        + startSimulation()
+    }
+}
+
+ComponentFactory --|> Ball
+ComponentAssemblerService --> Component
+WorkStationService --> Component
+SyncManager --> SimulationService
+SimulationService --> GaussChart
+
+@enduml
