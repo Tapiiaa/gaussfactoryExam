@@ -1,4 +1,5 @@
 package com.example.gaussfactory.visualization;
+import com.example.gaussfactory.service.SimulationService;
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
@@ -9,6 +10,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 
 public class GaussChart extends JFrame {
@@ -17,6 +19,8 @@ public class GaussChart extends JFrame {
     private List<Double> data;
     private List<Double> currentData;  // Para almacenar los datos a medida que caen
     private ChartPanel chartPanel;
+    private Random random;
+    private SimulationService simulationService;
 
     // Constructor que recibe el título y los datos para la visualización
     public GaussChart(String title, List<Double> data) {
@@ -56,6 +60,7 @@ public class GaussChart extends JFrame {
 
     // Método para crear o actualizar el dataset del histograma
     private void updateDataset() {
+        List<Double> ballPositions = simulationService.getBallPositions();
         if (!currentData.isEmpty()) {
             dataset = new HistogramDataset();
             double[] values = currentData.stream().mapToDouble(Double::doubleValue).toArray();
@@ -69,17 +74,9 @@ public class GaussChart extends JFrame {
 
     // Método para iniciar la simulación de la caída de las bolas
     private void startSimulation() {
-        Timer timer = new Timer(100, e -> {
-            if (!data.isEmpty()) {
-                // Agregar una bola a la vez desde los datos originales
-                currentData.add(data.remove(0));
-
-                // Actualizar el dataset y refrescar el gráfico
-                updateDataset();
-            } else {
-                // Parar el timer cuando todas las bolas hayan caído
-                ((Timer) e.getSource()).stop();
-            }
+        Timer timer = new Timer(150, e -> {
+            simulationService.startSimulation();
+            updateDataset();
         });
 
         timer.start();  // Iniciar el timer que actualiza el gráfico en intervalos

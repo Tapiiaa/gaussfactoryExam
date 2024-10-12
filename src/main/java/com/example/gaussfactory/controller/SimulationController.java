@@ -21,10 +21,11 @@ public class SimulationController {
 
     public void initializeSimulation(List<Double> data){
         simulationService.initializeBalls(data.size());
+        simulationService.setSimulationData(data);
     }
 
     public void startSimulation(){
-        simulationService.startSimulation();
+        simulationService.getBallPositions();
     }
 
     /**

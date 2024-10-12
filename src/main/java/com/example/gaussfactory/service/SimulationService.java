@@ -11,9 +11,7 @@ public class SimulationService {
     private List<Ball> balls; //Creamos una lista de bolas para simular la caída de varias bolas.
     private int speed = 1; //Velocidad de la simulación por defecto.
 
-    // Constructor que recibe los datos de la simulación
     public SimulationService(List<Double> data) {
-        this.data = data;
         this.balls = new ArrayList<>();
     }
 
@@ -34,13 +32,17 @@ public class SimulationService {
         }
     }
 
+    public void setSimulationData(List<Double> data){
+        this.data = data;
+    }
+
     public void startSimulation(){
         // Iniciar la simulación de la caída de las bolas
         for (Ball ball : balls){
             for (int i = 0; i < data.size(); i++) {
                 ball.fall();
                 try{
-                    Thread.sleep(1000/speed);  //Controla la velocidad de la simulacion.
+                    Thread.sleep(1000 / speed);  //Controla la velocidad de la simulacion.
                 } catch (InterruptedException e){
                     Thread.currentThread().interrupt();
                 }
@@ -58,6 +60,14 @@ public class SimulationService {
 
     public void setSimulationSpeed(int speed){
         this.speed = speed;  //Establecemos la velocidad de la simulación
+    }
+
+    public List<Double> getBallPositions(){
+        List<Double> positions = new ArrayList<>();
+        for (Ball ball : balls){
+            positions.add((double) ball.getPosition());
+        }
+        return positions;
     }
 }
 

@@ -1,5 +1,6 @@
 package com.example.gaussfactory.gaussfactory;
 import com.example.gaussfactory.service.DataLoader;
+import com.example.gaussfactory.service.WorkStationService;
 import com.example.gaussfactory.visualization.GaussChart;
 import com.example.gaussfactory.controller.SimulationController;
 import com.example.gaussfactory.service.SimulationService;
@@ -18,7 +19,7 @@ public class MainApp implements CommandLineRunner {
     private final DataLoader dataLoader;
 
     @Autowired
-    public MainApp(SimulationController simulationController, DataLoader dataLoader) {
+    public MainApp(SimulationController simulationController, DataLoader dataLoader, WorkStationService workStationService) {
         this.simulationController = simulationController;
         this.dataLoader = dataLoader;
     }
@@ -34,10 +35,10 @@ public class MainApp implements CommandLineRunner {
 
             // Crear un objeto de servicio de simulación con los datos
             simulationController.initializeSimulation(data);
-            simulationController.startSimulation();
+            simulationController.setSimulationSpeed
 
             // Mostrar el gráfico de la campana de Gauss usando Swing
-            GaussChart.showGaussChart(simulationController.getAllData());
+            GaussChart.showGaussChart(simulationController);
 
         } catch (IOException e) {
             e.printStackTrace();
