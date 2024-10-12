@@ -3,6 +3,7 @@ import java.util.ArrayList;
 import java.util.List;
 import com.example.gaussfactory.model.Ball;
 
+
 public class SimulationService {
 
     private List<Double> data;
@@ -20,8 +21,13 @@ public class SimulationService {
         return this.data;
     }
 
+    public List<Ball> getBalls(){
+        return this.balls;
+    }
+
     public void initializeBalls(int numberOfBalls){
         // Inicializar las bolas con la cantidad especificada
+        balls.clear();
         for (int i = 0; i < numberOfBalls; i++) {
             balls.add(new Ball());
         }
@@ -29,21 +35,28 @@ public class SimulationService {
 
     public void startSimulation(){
         // Iniciar la simulación de la caída de las bolas
-        for (int i = 0; i < data.size(); i++) {
-            ball.fall();
+        for (Ball ball : balls){
+            for (int i = 0; i < data.size(); i++) {
+                ball.fall();
+                try{
+                    Thread.sleep(1000/speed);  //Controla la velocidad de la simulacion.
+                } catch (InterruptedException e){
+                    Thread.currentThread().interrupt();
+                }
+            }
         }
     }
 
     public void resetSimulation(){
-        ball = new Ball();  //Creamos un nuevo objeto Ball para reiniciar la simulación
+        balls.clear();
     }
 
     public void stopSimulation(){
-        ball = null;  //Eliminamos el objeto Ball para detener la simulación
+        balls = null;  //Eliminamos el objeto Ball para detener la simulación
     }
 
     public void setSimulationSpeed(int speed){
-        ball.setSpeed(speed);  //Establecemos la velocidad de la simulación
+        this.speed = speed;  //Establecemos la velocidad de la simulación
     }
 }
 
