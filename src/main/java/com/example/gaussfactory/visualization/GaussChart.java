@@ -70,11 +70,15 @@ public class GaussChart extends JFrame {
 
     // Método para iniciar la simulación de la caída de las bolas
     private void startSimulation() {
-        Timer timer = new Timer(500, e -> {
-            simulationController.startSimulation();
-            updateDataset();
+        Timer timer = new Timer(100, e -> {
+            if (simulationController.getBallsLeft() > 0) {
+                currentData.add(simulationController.getBallPositions().get(0));
+                simulationController.startSimulationStep();
+                updateDataset();
+            } else {
+                ((Timer) e.getSource()).stop();
+            }
         });
-
         timer.start();  // Iniciar el timer que actualiza el gráfico en intervalos
     }
 

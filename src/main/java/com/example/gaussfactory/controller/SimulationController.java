@@ -1,4 +1,5 @@
 package com.example.gaussfactory.controller;
+import com.example.gaussfactory.model.Ball;
 import com.example.gaussfactory.service.SimulationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -42,5 +43,16 @@ public class SimulationController {
     @GetMapping("/simulation/data")
     public List<Double> getAllData() {
         return simulationService.getAllData();
+    }
+
+    public void startSimulationStep(){  // Método para avanzar un paso en la simulación y que no sea todo de golpe
+        if(!simulationService.getBalls().isEmpty()){
+            Ball ball = simulationService.getBalls().get(0);
+            ball.fall();
+        }
+    }
+
+    public int getBallsLeft(){
+        return simulationService.getBalls().size();
     }
 }
