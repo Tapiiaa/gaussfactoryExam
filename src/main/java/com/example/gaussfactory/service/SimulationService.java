@@ -1,68 +1,26 @@
-package com.example.gaussfactory.service;import java.util.HashMap;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.concurrent.locks.Condition;
-import java.util.concurrent.locks.Lock;
-import java.util.concurrent.locks.ReentrantLock;
+package com.example.gaussfactory.service;
+import java.util.List;
 
 public class SimulationService {
 
-    private int numberOfBalls;
-    private int numberOfLevels;
-    private Map<Integer, Integer> bins;
-    private boolean simulationRunning;
-    private final Lock lock = new ReentrantLock();
-    private final Condition condition = lock.newCondition();
+    private List<Double> data;
+    private int currentIndex = 0;
 
-    public SimulationService() {
-        bins = new HashMap<>();
+    // Constructor que recibe los datos de la simulación
+    public SimulationService(List<Double> data) {
+        this.data = data;
     }
 
-    public void startSimulation(int numberOfBalls, int numberOfLevels) {
-        lock.lock();
-        try {
-            this.numberOfBalls = numberOfBalls;
-            this.numberOfLevels = numberOfLevels;
-            this.simulationRunning = true;
-            bins.clear();
-            for (int i = 0; i <= numberOfLevels; i++) {
-                bins.put(i, 0);
-            }
-        } finally {
-            lock.unlock();
-        }
-    }
-
-    public boolean advanceSimulation() {
-        lock.lock();
-        try {
-            if (!simulationRunning || numberOfBalls <= 0) {
-                simulationRunning = false;
-                return false;
-            }
-
-            int position = 0;
-            for (int i = 0; i < numberOfLevels; i++) {
-                position += Math.random() < 0.5 ? -1 : 1;
-                position = Math.max(0, Math.min(numberOfLevels, position));
-            }
-
-            bins.put(position, bins.get(position) + 1);
-            numberOfBalls--;
-
-            condition.signalAll();
-            return true;
-        } finally {
-            lock.unlock();
-        }
-    }
-
-    public Map<Integer, Integer> getCurrentBins() {
-        lock.lock();
-        try {
-            return new HashMap<>(bins);
-        } finally {
-            lock.unlock();
+    // Método para avanzar en la simulación usando los datos del CSV
+    public double getNextValue() {
+        if (currentIndex < data.size()) {
+            double value = data.get(currentIndex);
+            currentIndex++;
+            return value;
+        } else {
+            // Si llegamos al final de los datos, volver al principio
+            currentIndex = 0;
+            return data.get(currentIndex);
         }
     }
 }
