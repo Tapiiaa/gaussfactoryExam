@@ -5,6 +5,7 @@ import com.example.gaussfactory.factory.ComponentFactory;
 import com.example.gaussfactory.model.Component;
 import com.example.gaussfactory.service.ComponentAssemblerService;
 import com.example.gaussfactory.service.WorkStationService;
+import com.example.gaussfactory.synchronization.SyncManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 

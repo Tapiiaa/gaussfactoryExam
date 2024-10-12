@@ -1,6 +1,7 @@
 package com.example.gaussfactory.controller;
 import com.example.gaussfactory.model.Ball;
 import com.example.gaussfactory.service.SimulationService;
+import com.example.gaussfactory.synchronization.SyncManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -11,20 +12,26 @@ import java.util.List;
 public class SimulationController {
 
     private final SimulationService simulationService;
+    private final SyncManager syncManager;
 
     // Constructor
     @Autowired
     public SimulationController(SimulationService simulationService) {
         this.simulationService = simulationService;
+        this.syncManager = new SyncManager();
     }
 
     public void initializeSimulation(List<Double> data){
-        simulationService.initializeBalls(data.size());
-        simulationService.setSimulationData(data);
+        syncManager.performSyncTask(() -> {
+            simulationService.initializeBalls(data.size());
+            simulationService.setSimulationData(data);
+        });
     }
 
     public void startSimulation(){
-        simulationService.startSimulation();
+        syncManager.performSyncTask(() -> {
+            simulationService.startSimulation();
+        });
     }
 
     public List<Double> getBallPositions(){
@@ -32,7 +39,9 @@ public class SimulationController {
     }
 
     public void setSimulationSpeed(int speed){
-        simulationService.setSimulationSpeed(speed);
+        syncManager.performSyncTask(() -> {
+            simulationService.setSimulationSpeed(speed);
+        });
     }
     /**
      * Método para devolver todos los datos de la simulación en formato JSON.
@@ -46,10 +55,12 @@ public class SimulationController {
     }
 
     public void startSimulationStep(){  // Método para avanzar un paso en la simulación y que no sea todo de golpe
-        if(!simulationService.getBalls().isEmpty()){
-            Ball ball = simulationService.getBalls().get(0);
-            ball.fall();
-        }
+        syncManager.performSyncTask(() -> {
+            if(!simulationService.getBalls().isEmpty()){
+                Ball ball = simulationService.getBalls().get(0);
+                ball.fall();
+            }
+        });
     }
 
     public int getBallsLeft(){
