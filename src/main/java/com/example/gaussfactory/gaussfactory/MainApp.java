@@ -12,7 +12,7 @@ public class MainApp {
         DataLoader loader = new DataLoader();
         try {
             // Cargar los datos desde el archivo CSV
-            List<Double> data = loader.loadData("C:\\Users\\Usuario\\gaussfactoryExam\\src\\main\\resources\\CompanyABCProfit.csv");
+            List<Double> data = loader.loadData("src/main/resources/CompanyABCProfit.csv");
 
             // Verificar que los datos se han cargado correctamente
             System.out.println("Datos cargados: " + data);  // Imprimir los datos para depuración
