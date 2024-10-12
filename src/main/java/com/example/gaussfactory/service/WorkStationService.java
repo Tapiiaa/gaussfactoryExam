@@ -1,6 +1,7 @@
 package com.example.gaussfactory.service;
 
 import com.example.gaussfactory.model.Component;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.concurrent.Semaphore;
@@ -9,7 +10,10 @@ import java.util.concurrent.Semaphore;
 public class WorkStationService {
     private final Semaphore semaphore; //Inicializamos el semaforo
 
-    public WorkStationService(int maxComponents) {
+    @Autowired
+    private int maxComponents;
+
+    public WorkStationService() {
         this.semaphore = new Semaphore(maxComponents);
     }
 

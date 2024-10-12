@@ -2,8 +2,9 @@ package com.example.gaussfactory.service;
 import java.util.ArrayList;
 import java.util.List;
 import com.example.gaussfactory.model.Ball;
+import org.springframework.stereotype.Service;
 
-
+@Service
 public class SimulationService {
 
     private List<Double> data;

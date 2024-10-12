@@ -1,10 +1,15 @@
 package com.example.gaussfactory.service;
+import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.RestController;
+
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+@Component
 public class DataLoader {
 
     // Método para cargar los datos desde un archivo CSV con una ruta absoluta
