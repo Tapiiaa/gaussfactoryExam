@@ -19,7 +19,7 @@ public class MainApp implements CommandLineRunner {
     private final DataLoader dataLoader;
 
     @Autowired
-    public MainApp(SimulationController simulationController, DataLoader dataLoader, WorkStationService workStationService) {
+    public MainApp(SimulationController simulationController, DataLoader dataLoader) {
         this.simulationController = simulationController;
         this.dataLoader = dataLoader;
     }

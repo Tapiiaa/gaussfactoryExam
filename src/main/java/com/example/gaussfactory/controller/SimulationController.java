@@ -1,12 +1,10 @@
 package com.example.gaussfactory.controller;
 import com.example.gaussfactory.service.SimulationService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @RestController
 public class SimulationController {
@@ -25,7 +23,11 @@ public class SimulationController {
     }
 
     public void startSimulation(){
-        simulationService.getBallPositions();
+        simulationService.startSimulation();
+    }
+
+    public List<Double> getBallPositions(){
+        return simulationService.getBallPositions();
     }
 
     public void setSimulationSpeed(int speed){

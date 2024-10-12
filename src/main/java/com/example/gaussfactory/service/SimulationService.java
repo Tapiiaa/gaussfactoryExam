@@ -11,7 +11,7 @@ public class SimulationService {
     private List<Ball> balls; //Creamos una lista de bolas para simular la caída de varias bolas.
     private int speed = 1; //Velocidad de la simulación por defecto.
 
-    public SimulationService(List<Double> data) {
+    public SimulationService() {
         this.balls = new ArrayList<>();
     }
 

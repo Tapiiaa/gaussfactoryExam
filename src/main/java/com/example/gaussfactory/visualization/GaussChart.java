@@ -1,33 +1,29 @@
 package com.example.gaussfactory.visualization;
-import com.example.gaussfactory.service.SimulationService;
+import com.example.gaussfactory.controller.SimulationController;
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
 import org.jfree.data.statistics.HistogramDataset;
-import org.springframework.stereotype.Component;
 
 import javax.swing.*;
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 
 
 public class GaussChart extends JFrame {
 
     private HistogramDataset dataset;
-    private List<Double> data;
     private List<Double> currentData;  // Para almacenar los datos a medida que caen
     private ChartPanel chartPanel;
-    private Random random;
-    private SimulationService simulationService;
+    private SimulationController simulationController;
 
     // Constructor que recibe el título y los datos para la visualización
-    public GaussChart(String title, List<Double> data) {
+    public GaussChart(String title, SimulationController simulationController) {
         super(title);
-
-        this.data = data;
+        this.simulationController = simulationController;
         this.currentData = new ArrayList<>();  // Inicialmente vacío
+
 
         // Crear el dataset con un valor mínimo para evitar el error inicial
         dataset = new HistogramDataset();
@@ -60,7 +56,7 @@ public class GaussChart extends JFrame {
 
     // Método para crear o actualizar el dataset del histograma
     private void updateDataset() {
-        List<Double> ballPositions = simulationService.getBallPositions();
+        List<Double> ballPositions = simulationController.getBallPositions();
         if (!currentData.isEmpty()) {
             dataset = new HistogramDataset();
             double[] values = currentData.stream().mapToDouble(Double::doubleValue).toArray();
@@ -74,8 +70,8 @@ public class GaussChart extends JFrame {
 
     // Método para iniciar la simulación de la caída de las bolas
     private void startSimulation() {
-        Timer timer = new Timer(150, e -> {
-            simulationService.startSimulation();
+        Timer timer = new Timer(500, e -> {
+            simulationController.startSimulation();
             updateDataset();
         });
 
@@ -83,12 +79,11 @@ public class GaussChart extends JFrame {
     }
 
     // Método para mostrar el gráfico
-    public static void showGaussChart(List<Double> data) {
+    public static void showGaussChart(SimulationController simulationController ) {
         SwingUtilities.invokeLater(() -> {
-            GaussChart chart = new GaussChart("Visualización de Campana de Gauss (Tiempo Real)", data);
+            GaussChart chart = new GaussChart("Visualización de Campana de Gauss (Tiempo Real)", simulationController);
             chart.pack();
             chart.setVisible(true);
         });
     }
 }
-
