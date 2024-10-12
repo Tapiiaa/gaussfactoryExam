@@ -35,7 +35,7 @@ public class MainApp implements CommandLineRunner {
 
             // Crear un objeto de servicio de simulación con los datos
             simulationController.initializeSimulation(data);
-            simulationController.setSimulationSpeed
+            simulationController.setSimulationSpeed(5);
 
             // Mostrar el gráfico de la campana de Gauss usando Swing
             GaussChart.showGaussChart(simulationController);

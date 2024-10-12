@@ -28,6 +28,9 @@ public class SimulationController {
         simulationService.getBallPositions();
     }
 
+    public void setSimulationSpeed(int speed){
+        simulationService.setSimulationSpeed(speed);
+    }
     /**
      * Método para devolver todos los datos de la simulación en formato JSON.
      * Este método será expuesto como un endpoint REST en /simulation/data.
