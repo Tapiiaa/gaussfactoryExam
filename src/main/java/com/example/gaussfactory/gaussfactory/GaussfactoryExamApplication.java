@@ -1,22 +1,22 @@
 package com.example.gaussfactory.gaussfactory;
 import com.example.gaussfactory.service.SimulationService;
-import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 import javax.swing.*;
 import java.awt.*;
-import java.util.Map;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.Timer;
 import java.util.TimerTask;
+import java.util.Map;
 
-@SpringBootApplication
 public class GaussfactoryExamApplication extends JFrame {
 
     private SimulationService simulationService;
     private JPanel graphPanel;
+    private JSlider ballsSlider, levelsSlider;
+    private JLabel ballsLabel, levelsLabel;
 
     public static void main(String[] args) {
-        SpringApplication.run(GaussfactoryExamApplication.class, args);
         SwingUtilities.invokeLater(() -> {
             GaussfactoryExamApplication app = new GaussfactoryExamApplication();
             app.setVisible(true);
@@ -24,13 +24,36 @@ public class GaussfactoryExamApplication extends JFrame {
     }
 
     public GaussfactoryExamApplication() {
-        // Configurar la ventana
-        setTitle("Simulación de Campana de Gauss");
+        // Initialize window
+        setTitle("Gaussian Bell Simulation");
         setSize(800, 600);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
 
-        // Configurar el panel de gráficos
+        // Create sliders and labels for user interaction
+        ballsLabel = new JLabel("Number of Balls: 1000");
+        levelsLabel = new JLabel("Number of Levels: 10");
+        ballsSlider = new JSlider(100, 5000, 1000);
+        levelsSlider = new JSlider(2, 20, 10);
+
+        ballsSlider.addChangeListener(e -> {
+            ballsLabel.setText("Number of Balls: " + ballsSlider.getValue());
+            restartSimulation();
+        });
+
+        levelsSlider.addChangeListener(e -> {
+            levelsLabel.setText("Number of Levels: " + levelsSlider.getValue());
+            restartSimulation();
+        });
+
+        JPanel controlsPanel = new JPanel();
+        controlsPanel.setLayout(new GridLayout(2, 2));
+        controlsPanel.add(ballsLabel);
+        controlsPanel.add(ballsSlider);
+        controlsPanel.add(levelsLabel);
+        controlsPanel.add(levelsSlider);
+
+        // Add the control panel and graph panel
         graphPanel = new JPanel() {
             @Override
             protected void paintComponent(Graphics g) {
@@ -39,29 +62,37 @@ public class GaussfactoryExamApplication extends JFrame {
             }
         };
         graphPanel.setBackground(Color.WHITE);
-        add(graphPanel);
 
-        // Inicializar la simulación
+        setLayout(new BorderLayout());
+        add(controlsPanel, BorderLayout.NORTH);
+        add(graphPanel, BorderLayout.CENTER);
+
+        // Initialize the simulation
         simulationService = new SimulationService();
-        simulationService.startSimulation(1000, 10); // Iniciar la simulación con 1000 bolas y 10 niveles
+        restartSimulation();
 
-        // Configurar un Timer para actualizar la gráfica periódicamente
+        // Timer to update the graph in real-time
         Timer timer = new Timer();
         timer.scheduleAtFixedRate(new TimerTask() {
             @Override
             public void run() {
                 updateGraph();
             }
-        }, 0, 500); // Actualizar cada 500 ms
+        }, 0, 500); // Update every 500 ms
     }
 
-    // Método para actualizar la gráfica en el panel
+    // Restart the simulation with new parameters
+    private void restartSimulation() {
+        simulationService.startSimulation(ballsSlider.getValue(), levelsSlider.getValue());
+    }
+
+    // Update the graph in the panel
     private void updateGraph() {
         simulationService.advanceSimulation();
         graphPanel.repaint();
     }
 
-    // Método para dibujar el gráfico en el panel
+    // Draw the graph on the panel
     private void drawGraph(Graphics g) {
         Map<Integer, Integer> bins = simulationService.getCurrentBins();
 
@@ -69,22 +100,38 @@ public class GaussfactoryExamApplication extends JFrame {
         int panelHeight = graphPanel.getHeight();
         int binWidth = panelWidth / bins.size();
 
-        // Encontrar el valor máximo para escalar las barras
+        // Draw X and Y axes
+        g.setColor(Color.BLACK);
+        g.drawLine(50, panelHeight - 50, panelWidth - 50, panelHeight - 50); // X axis
+        g.drawLine(50, panelHeight - 50, 50, 50); // Y axis
+
+        // Find the maximum value to scale the bars
         int maxCount = bins.values().stream().max(Integer::compare).orElse(1);
 
-        // Dibujar cada barra
-        int x = 0;
+        // Draw each point on the curve
+        int previousX = -1, previousY = -1;
+        int xPosition = 50;
         for (Map.Entry<Integer, Integer> entry : bins.entrySet()) {
             int count = entry.getValue();
-            int barHeight = (int) ((double) count / maxCount * panelHeight);
+            int barHeight = (int) ((double) count / maxCount * (panelHeight - 100));
+            int yPosition = panelHeight - 50 - barHeight;
 
             g.setColor(Color.BLUE);
-            g.fillRect(x, panelHeight - barHeight, binWidth, barHeight);
+            g.fillOval(xPosition - 3, yPosition - 3, 6, 6); // Draw the curve point
 
-            g.setColor(Color.BLACK);
-            g.drawRect(x, panelHeight - barHeight, binWidth, barHeight);
+            // Draw the line between points
+            if (previousX != -1 && previousY != -1) {
+                g.drawLine(previousX, previousY, xPosition, yPosition);
+            }
 
-            x += binWidth;
+            previousX = xPosition;
+            previousY = yPosition;
+            xPosition += binWidth;
         }
+
+        // Labels for the axes
+        g.setColor(Color.BLACK);
+        g.drawString("Levels", panelWidth / 2, panelHeight - 20);
+        g.drawString("Balls", 10, panelHeight / 2);
     }
 }
