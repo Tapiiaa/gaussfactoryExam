@@ -1,5 +1,10 @@
 # Simulación de Campana de Gauss en Tiempo Real
 
+----------------------------------
+Link a mi repositorio: https://github.com/Tapiiaa/gaussfactoryExam.git
+
+----------------------------------
+
 Bienvenidos a nuestro proyecto de simulación de una **campana de Gauss**. Aquí hemos desarrollado una aplicación en **Java** que permite visualizar la caída de bolas en tiempo real, representando una distribución normal (campana de Gauss). Utilizamos **Swing** para la interfaz gráfica y **JFreeChart** para generar los gráficos.
 
 ## Integrantes
