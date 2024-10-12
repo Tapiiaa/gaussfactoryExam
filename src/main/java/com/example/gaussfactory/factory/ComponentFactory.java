@@ -8,9 +8,9 @@ public class ComponentFactory {
     public static Component createComponent(String type) {
         switch(type){
             case "ball":
-                return new Ball();
+              return new Ball();
             default:
-                throw new IllegalArgumentException("El tipo de componente no es valido");
+               throw new IllegalArgumentException("El tipo de componente no es valido");
         }
     }
 }
