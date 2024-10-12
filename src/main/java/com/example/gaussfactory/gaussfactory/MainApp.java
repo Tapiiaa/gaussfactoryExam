@@ -1,6 +1,6 @@
 package com.example.gaussfactory.gaussfactory;
-import com.example.gaussfactory.DataLoader;
-import com.example.gaussfactory.GaussChart;
+import com.example.gaussfactory.service.DataLoader;
+import com.example.gaussfactory.visualization.GaussChart;
 import com.example.gaussfactory.controller.SimulationController;
 import com.example.gaussfactory.service.SimulationService;
 

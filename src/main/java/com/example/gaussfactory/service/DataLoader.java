@@ -1,4 +1,4 @@
-package com.example.gaussfactory;
+package com.example.gaussfactory.service;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
