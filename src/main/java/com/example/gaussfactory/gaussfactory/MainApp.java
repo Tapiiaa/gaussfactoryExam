@@ -11,19 +11,32 @@ import org.springframework.stereotype.Component;
 
 import java.io.IOException;
 import java.util.List;
-
+/**
+ * Clase principal de la aplicación.
+ * @version 1.0, 16/06/2021
+ * @autor Pedro Alonso Tapia Lobo
+ * @autor Patrik Paul Sirbu
+ */
 @Component
 public class MainApp implements CommandLineRunner {
 
     private final SimulationController simulationController;
     private final DataLoader dataLoader;
 
+    /**
+     * Constructor de la clase MainApp.
+     * @param simulationController Controlador de la simulación.
+     * @param dataLoader Servicio de carga de datos.
+     */
     @Autowired
     public MainApp(SimulationController simulationController, DataLoader dataLoader) {
         this.simulationController = simulationController;
         this.dataLoader = dataLoader;
     }
-
+    /**
+     * Método principal de la aplicación.
+     * @param args
+     */
     @Override
     public void run(String... args) throws Exception {
         try {
