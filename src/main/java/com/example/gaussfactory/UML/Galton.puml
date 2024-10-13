@@ -111,5 +111,13 @@ ComponentAssemblerService --> Component
 WorkStationService --> Component
 SyncManager --> SimulationService
 SimulationService --> GaussChart
+SimulationService --> Ball
+GaussChart --> SimulationController
+SimulationController --> SimulationService
+SimulationController --> SyncManager
+FirebaseConfig --> Firestore
+SimulationService --> FirebaseConfig
+WorkStationService --> SyncManager
+ComponentAssemblerService --> BlockingQueue
 
 @enduml
