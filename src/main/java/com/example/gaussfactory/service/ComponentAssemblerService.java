@@ -5,7 +5,12 @@ import com.example.gaussfactory.synchronization.SyncManager;
 import org.springframework.stereotype.Service;
 
 import java.util.concurrent.BlockingQueue;
-
+/**
+ * Clase que ensambla los componentes.
+ * @version 1.0, 16/06/2021
+ * @autor Pedro Alonso Tapia Lobo
+ * @autor Patrik Paul Sirbu
+ */
 @Service
 public class ComponentAssemblerService {
 
@@ -18,7 +23,10 @@ public class ComponentAssemblerService {
         this.syncManager = new SyncManager();
     }
 
-    //Metodo para ensamblar un componente que podra lanzar una excepcion si no se puede ensamblar
+    /**
+     * Metodo que ensambla un componente.
+     * @throws InterruptedException
+     */
     public void assembleComponent() throws InterruptedException {
         syncManager.performSyncTask(() -> {
             try {
