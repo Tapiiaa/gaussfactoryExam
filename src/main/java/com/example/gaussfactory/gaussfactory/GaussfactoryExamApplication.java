@@ -10,7 +10,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import java.util.List;
 /**
  * Clase principal de la aplicación.
- * @version 1.0, 16/06/2021
+ * @version 1.0, 13/10/2024
  * @autor Pedro Alonso Tapia Lobo
  * @autor Patrik Paul Sirbu
  */
