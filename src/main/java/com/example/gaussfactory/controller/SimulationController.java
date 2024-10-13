@@ -19,14 +19,14 @@ public class SimulationController {
 
     private final SimulationService simulationService;
     private final SyncManager syncManager;
-    private final Firestore firestore;
+    //private final Firestore firestore;
 
     // Constructor
     @Autowired
-    public SimulationController(SimulationService simulationService, Firestore firestore) {
+    public SimulationController(SimulationService simulationService) {
         this.simulationService = simulationService;
         this.syncManager = new SyncManager();
-        this.firestore = firestore;
+        //this.firestore = firestore;
     }
 
     public void initializeSimulation(List<Double> data){
@@ -46,12 +46,6 @@ public class SimulationController {
             docData.put("status", "Simulation started");
             docData.put("data", simulationData);
 
-            // Guardar el documento en la colección 'simulations' en Firestore
-            try {
-                firestore.collection("simulations").document().set(docData).get();  // Esto guarda los datos de la simulación en Firestore
-            } catch (InterruptedException | ExecutionException e) {
-                throw new RuntimeException(e);
-            }
         });
     }
 

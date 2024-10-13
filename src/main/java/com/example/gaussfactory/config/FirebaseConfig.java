@@ -1,3 +1,4 @@
+/*
 package com.example.gaussfactory.config;
 
 import com.google.auth.oauth2.GoogleCredentials;
@@ -36,5 +37,5 @@ public class FirebaseConfig {
             throw new RuntimeException("Error initializing Firebase", e);
         }
 
-}
-}
+    }
+}*/
