@@ -10,6 +10,13 @@ import java.util.concurrent.BlockingQueue;
 @Configuration
 public class ComponentAssemblerConfig {
 
+
+    /**
+     * Metodo que crea una cola bloqueante de componentes.
+     * @return Cola bloqueante de componentes.
+     * @author: Pedro Alonso Tapia Lobo
+     * @author: Patrik Paul Sirbu
+     */
     @Bean
     public BlockingQueue<Component> componentQueue() {
         return new ArrayBlockingQueue<>(5);

@@ -10,7 +10,12 @@ import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 
-
+/**
+ * Clase para visualizar la campana de Gauss en tiempo real.
+ * @version 1.0, 16/06/2021
+ * @autor Pedro Alonso Tapia Lobo
+ * @autor Patrik Paul Sirbu
+ */
 public class GaussChart extends JFrame {
 
     private HistogramDataset dataset;

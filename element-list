@@ -1,0 +1,8 @@
+com.example.gaussfactory.config
+com.example.gaussfactory.controller
+com.example.gaussfactory.factory
+com.example.gaussfactory.gaussfactory
+com.example.gaussfactory.model
+com.example.gaussfactory.service
+com.example.gaussfactory.synchronization
+com.example.gaussfactory.visualization

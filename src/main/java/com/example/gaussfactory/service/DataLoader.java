@@ -8,7 +8,12 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-
+/**
+ * Clase para cargar los datos desde un archivo CSV.
+ * @version 1.0, 16/06/2021
+ * @autor Pedro Alonso Tapia Lobo
+ * @autor Patrik Paul Sirbu
+ */
 @Component
 public class DataLoader {
 

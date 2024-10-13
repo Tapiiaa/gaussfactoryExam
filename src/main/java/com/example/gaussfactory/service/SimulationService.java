@@ -4,7 +4,12 @@ import java.util.List;
 import com.example.gaussfactory.model.Ball;
 import com.example.gaussfactory.synchronization.SyncManager;
 import org.springframework.stereotype.Service;
-
+/**
+ * Clase para simular la caída de bolas.
+ * @version 1.0, 16/06/2021
+ * @autor Pedro Alonso Tapia Lobo
+ * @autor Patrik Paul Sirbu
+ */
 @Service
 public class SimulationService {
 
