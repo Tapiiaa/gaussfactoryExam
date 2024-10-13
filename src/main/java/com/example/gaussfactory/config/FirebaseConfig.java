@@ -23,8 +23,12 @@ public class FirebaseConfig {
         try (FileInputStream serviceAccount = new FileInputStream(credentialsPath)) {
             FirebaseOptions options = new FirebaseOptions.Builder()
                     .setCredentials(GoogleCredentials.fromStream(serviceAccount))
-                    .setDatabaseUrl("projects/gaussfactoryexam/databases/(default)/documents")
+                    .setDatabaseUrl("https://gaussfactoryexam.firebaseio.com")
                     .build();
+
+            if(FirebaseApp.getApps().isEmpty()){
+                FirebaseApp.initializeApp(options);
+            }
 
             FirebaseApp.initializeApp(options);
             return FirestoreClient.getFirestore();
