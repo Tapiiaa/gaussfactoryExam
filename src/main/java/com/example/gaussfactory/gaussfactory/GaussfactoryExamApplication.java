@@ -4,6 +4,7 @@ import com.example.gaussfactory.controller.SimulationController;
 import com.example.gaussfactory.model.Ball;
 import com.example.gaussfactory.service.SimulationService;
 import org.springframework.boot.SpringApplication;
+import org.springframework.boot.SpringBootConfiguration;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 import java.util.List;
@@ -14,6 +15,7 @@ import java.util.List;
  * @autor Patrik Paul Sirbu
  */
 @SpringBootApplication(scanBasePackages = "com.example.gaussfactory")
+@SpringBootConfiguration
 public class GaussfactoryExamApplication {
     /**
      * Método principal de la aplicación.
