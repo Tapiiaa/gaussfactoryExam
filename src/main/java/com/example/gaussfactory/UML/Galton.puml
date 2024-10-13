@@ -16,6 +16,7 @@ package com.example.gaussfactory.model {
         + getPosition()
         + getCurrentLevel()
         + incrementLevel()
+        + setSpeed(int speed)
     }
 }
 
@@ -37,6 +38,12 @@ package com.example.gaussfactory.service {
         + resetSimulation()
         + stopSimulation()
         + setSimulationSpeed(int speed)
+        + getAllData()
+        + getBalls()
+        + initializeBalls(int numberOfBalls)
+        + setSimulationData(List<Double> data)
+        + List<Double> getBallPositions()
+
     }
 }
 
@@ -48,14 +55,19 @@ package com.example.gaussfactory.factory {
 
 package com.example.gaussfactory.visualization {
     class GaussChart {
-        List<Double> data
+        HistogramDataset dataset
         List<Double> currentData
-        + showGaussChart(List<Double> data)
+        ChartPanel chartPanel
+        SimulationController simulationController
+        - updateDataset()
+        - startSimulation()
+        + showGaussChart(SimulationController simulationController)
     }
 }
 
 package com.example.gaussfactory.synchronization {
     class SyncManager {
+        - Lock lock
         + performSynchronizedTask(Runnable task)
     }
 }
@@ -66,7 +78,16 @@ package com.example.gaussfactory.config {
     }
 
     class FirebaseConfig {
+        - String credentialsPath
         + Firestore firestore()
+    }
+
+    class WorkStationService {
+        + int maxComponents()
+    }
+
+    class ComponentAssemblerService {
+        + BlockingQueue<Component> componentQueue()
     }
 }
 
@@ -76,7 +97,12 @@ package com.example.gaussfactory.controller {
     }
 
     class SimulationController {
+        + initializeSimulation(List<Double> data)
         + startSimulation()
+        + setSimulationSpeed(int speed)
+        + List<Double> getAllData()
+        + startSimulationStep()
+        + getBallsLeft()
     }
 }
 

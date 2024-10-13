@@ -17,6 +17,7 @@ public class ComponentAssemblerConfig {
      * @author: Pedro Alonso Tapia Lobo
      * @author: Patrik Paul Sirbu
      */
+
     @Bean
     public BlockingQueue<Component> componentQueue() {
         return new ArrayBlockingQueue<>(5);
